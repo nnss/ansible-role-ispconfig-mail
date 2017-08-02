@@ -1,0 +1,9 @@
+---
+
+- name: Setting AllowSupplementaryGroups in clamav
+  lineinfile:
+    dest: /etc/clamav/clamd.conf
+    regexp: '^AllowSupplementaryGroups.*'
+    line: 'AllowSupplementaryGroups true'
+    state: present
+  notify: restart clamav

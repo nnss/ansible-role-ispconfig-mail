@@ -1,0 +1,48 @@
+
+ispconfig_mail_packages:
+  - amavisd-new
+  - apt-listchanges
+  - clamav
+  - clamav-daemon
+  - clamav-docs
+  - daemon
+  - dovecot-imapd
+  - dovecot-mysql
+  - dovecot-pop3d
+  - dovecot-sieve
+  - getmail4
+  - libauthen-sasl-perl
+  - libio-socket-ssl-perl
+  - libio-string-perl
+  - libnet-dns-perl
+  - libnet-ident-perl
+  - libnet-ldap-perl
+  - nomarch
+  - openssl
+  - postfix
+  - postfix-doc
+  - postfix-mysql
+  - spamassassin
+  - zoo
+
+ispconfig_postfix_mydestination: "{{ ansible_fqdn }} {{ inventory_hostname }} localhost localhost.localdomain"
+ispconfig_postfix_myhostname: "{{ ansible_fqdn }}"
+ispconfig_postfix_myorigin: /etc/mailname
+ispconfig_postfix_smtpd_recipient_restrictions: permit_mynetworks, permit_sasl_authenticated, reject_unauth_destination, reject_non_fqdn_hostname, reject_unknown_recipient_domain, reject_unauth_destination, reject_invalid_hostname, check_recipient_access mysql:/etc/postfix/mysql-virtual_recipient.cf
+ispconfig_postfix_smtpd_tls_cert_file: "/etc/letsencrypt/live/{{ ansible_fqdn }}/fullchain.pem"
+ispconfig_postfix_smtpd_tls_key_file: "/etc/letsencrypt/live/{{ ansible_fqdn }}/privkey.pem"
+
+ispconfig_postfix_main_cf:
+  - regexp: ^mydestination
+    line: mydestination = {{ ispconfig_postfix_mydestination }}
+  - regexp: ^myhostname
+    line: myhostname = {{ ispconfig_postfix_myhostname }}
+  - regexp: ^myorigin
+    line: myorigin = {{ ispconfig_postfix_myorigin }}
+  - regexp: ^smtpd_tls_cert_file
+    line: smtpd_tls_cert_file = {{ ispconfig_postfix_smtpd_tls_cert_file }}
+  - regexp: ^smtpd_tls_key_file
+    line: smtpd_tls_key_file = {{ ispconfig_postfix_smtpd_tls_key_file }}
+  - regexp: ^smtpd_recipient_restrictions
+    line: "smtpd_recipient_restrictions = {{ ispconfig_postfix_smtpd_recipient_restrictions }}"
+

@@ -1,0 +1,14 @@
+---
+
+- include: apt.yml
+  when: ispconfig_configure_mail == 'y'
+
+- include: dovecot.yml
+  when: ispconfig_configure_mail == 'y'
+
+- include: clamav.yml
+  when: ispconfig_configure_mail == 'y'
+
+- include: postfix.yml
+  when: ispconfig_configure_mail == 'y'
+

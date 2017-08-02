@@ -1,0 +1,32 @@
+---
+
+- name: Check /etc/postfix/main.cf
+  stat:
+    path: /etc/postfix/main.cf
+  register: postfix
+
+- name: Configure /etc/postfix/main.cf
+  lineinfile:
+    dest: /etc/postfix/main.cf
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+    owner: root
+    group: root
+    mode: '0644'
+    state: present
+  with_items: "{{ ispconfig_postfix_main_cf }}"
+  when: postfix.stat.exists | default(False)
+
+- name: Enable smtpd in postfix
+  lineinfile:
+    dest: /etc/postfix/master.cf
+    regexp: '^submission inet n.*'
+    line: 'submission inet n       -       -       -       -       smtpd'
+    state: present
+  when: postfix.stat.exists | default(False)
+
+- name: Verify postfix config
+  command: bash -c 'postfix check'
+  when: postfix.stat.exists | default(False)
+  register: postconf
+  notify: restart postfix

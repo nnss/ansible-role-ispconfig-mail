@@ -1,0 +1,9 @@
+---
+
+- name: Setting auth_verbose in dovecot
+  lineinfile:
+    dest: /etc/dovecot/conf.d/10-logging.conf
+    line: 'auth_verbose = yes'
+    state: present
+  notify: restart dovecot
+
