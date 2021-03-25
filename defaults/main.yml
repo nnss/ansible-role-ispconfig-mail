@@ -23,7 +23,17 @@ ispconfig_mail_packages:
   - postfix-doc
   - postfix-mysql
   - spamassassin
-  - zoo
+  - unzip 
+  - bzip2
+  - arj
+  - lzop
+  - cabextract
+  - p7zip
+  - p7zip-full
+  - unrar-free
+  - lrzip 
+  - nmon
+  - strace
 
 ispconfig_postfix_mydestination: "{{ ansible_fqdn }} {{ inventory_hostname }} localhost localhost.localdomain"
 ispconfig_postfix_myhostname: "{{ ansible_fqdn }}"
